@@ -16,12 +16,14 @@ package com.ginobefunny.elasticsearch.plugins.synonym;
 import com.ginobefunny.elasticsearch.plugins.synonym.service.Configuration;
 import com.ginobefunny.elasticsearch.plugins.synonym.service.DynamicSynonymTokenFilter;
 import com.ginobefunny.elasticsearch.plugins.synonym.service.SynonymRuleManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.core.KeywordAnalyzer;
 import org.apache.lucene.analysis.core.SimpleAnalyzer;
 import org.apache.lucene.analysis.core.WhitespaceAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.elasticsearch.common.logging.Loggers;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.env.Environment;
 import org.elasticsearch.index.IndexSettings;
@@ -30,15 +32,19 @@ import org.elasticsearch.index.analysis.AbstractTokenFilterFactory;
 import java.io.IOException;
 
 public class DynamicSynonymTokenFilterFactory extends AbstractTokenFilterFactory {
-
+    
+    private static final Logger LOGGER = Loggers.getLogger(DynamicSynonymTokenFilterFactory.class, "dynamic-synonym");
+    
     public DynamicSynonymTokenFilterFactory(IndexSettings indexSettings, Environment env,
                                             String name, Settings settings) throws IOException {
         super(indexSettings, name, settings);
-
+    
         // get the filter setting params
         final boolean ignoreCase = settings.getAsBoolean("ignore_case", false);
         final boolean expand = settings.getAsBoolean("expand", true);
         final String dbUrl = settings.get("db_url");
+        final String username = settings.get("username");
+        final String password = settings.get("password");
         final String tokenizerName = settings.get("tokenizer", "whitespace");
 
         Analyzer analyzer;
@@ -53,7 +59,7 @@ public class DynamicSynonymTokenFilterFactory extends AbstractTokenFilterFactory
         }
 
         // NOTE: the manager will only init once
-        SynonymRuleManager.initial(new Configuration(ignoreCase, expand, analyzer, dbUrl));
+        SynonymRuleManager.initial(new Configuration(ignoreCase, expand, analyzer, dbUrl, username, password));
     }
 
     @Override

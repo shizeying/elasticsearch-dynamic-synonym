@@ -13,13 +13,12 @@
  */
 package com.ginobefunny.elasticsearch.plugins.synonym.service;
 
-import com.ginobefunny.elasticsearch.plugins.synonym.service.utils.Monitor;
 import org.apache.logging.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.analysis.tokenattributes.PositionIncrementAttribute;
-import org.elasticsearch.common.logging.ESLoggerFactory;
+import org.elasticsearch.common.logging.Loggers;
 
 import java.io.IOException;
 import java.util.*;
@@ -30,7 +29,7 @@ import java.util.*;
  */
 public class SimpleSynonymMap {
 
-    private static final Logger LOGGER = ESLoggerFactory.getLogger(Monitor.class.getName());
+    private static final Logger LOGGER = Loggers.getLogger(SimpleSynonymMap.class,"dynamic-synonym");
 
     private Map<String, List<String>> ruleMap = new HashMap<String, List<String>>();
 

@@ -20,34 +20,46 @@ import org.apache.lucene.analysis.Analyzer;
  */
 public class Configuration {
 
-    private final boolean ignoreCase;
+	private final boolean ignoreCase;
 
-    private final boolean expand;
+	private final boolean expand;
 
-    private final String dbUrl;
+	private final String dbUrl;
+	private final String username;
+	private final String password;
 
-    private final Analyzer analyzer;
+	private final Analyzer analyzer;
 
-    public Configuration(boolean ignoreCase, boolean expand, Analyzer analyzer, String dbUrl) {
-        this.ignoreCase = ignoreCase;
-        this.expand = expand;
-        this.analyzer = analyzer;
-        this.dbUrl = dbUrl;
+	public Configuration(boolean ignoreCase, boolean expand, Analyzer analyzer, String dbUrl, final String username, final String password) {
+		this.ignoreCase = ignoreCase;
+		this.expand = expand;
+		this.analyzer = analyzer;
+		this.dbUrl = dbUrl;
+        this.username = username;
+        this.password = password;
     }
+	
+	public String getUsername() {
+		return username;
+	}
+	
+	public String getPassword() {
+		return password;
+	}
+	
+	public Analyzer getAnalyzer() {
+		return analyzer;
+	}
 
-    public Analyzer getAnalyzer() {
-        return analyzer;
-    }
+	public boolean isIgnoreCase() {
+		return ignoreCase;
+	}
 
-    public boolean isIgnoreCase() {
-        return ignoreCase;
-    }
+	public boolean isExpand() {
+		return expand;
+	}
 
-    public boolean isExpand() {
-        return expand;
-    }
-
-    public String getDBUrl() {
-        return dbUrl;
-    }
+	public String getDBUrl() {
+		return dbUrl;
+	}
 }

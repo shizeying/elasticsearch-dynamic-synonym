@@ -16,36 +16,36 @@ package com.ginobefunny.elasticsearch.plugins.synonym.service.utils;
 import com.ginobefunny.elasticsearch.plugins.synonym.service.Configuration;
 import com.ginobefunny.elasticsearch.plugins.synonym.service.SynonymRuleManager;
 import org.apache.logging.log4j.Logger;
-import org.elasticsearch.common.logging.ESLoggerFactory;
+import org.elasticsearch.common.logging.Loggers;
 
 /**
  * Created by ginozhang on 2017/1/12.
  */
 public class Monitor implements Runnable {
+	
+	private static final Logger LOGGER = Loggers.getLogger(Runnable.class,"dynamic-synonym");
 
-    private static final Logger LOGGER = ESLoggerFactory.getLogger(Monitor.class.getName());
+	private Configuration configuration;
 
-    private Configuration configuration;
+	private long lastUpdateVersion;
 
-    private long lastUpdateVersion;
+	public Monitor(Configuration cfg, long initialVersion) {
+		this.configuration = cfg;
+		this.lastUpdateVersion = initialVersion;
+	}
 
-    public Monitor(Configuration cfg, long initialVersion) {
-        this.configuration = cfg;
-        this.lastUpdateVersion = initialVersion;
-    }
-
-    @Override
-    public void run() {
-        try {
-            long currentMaxVersion = JDBCUtils.queryMaxSynonymRuleVersion(configuration.getDBUrl());
-            if (currentMaxVersion > lastUpdateVersion) {
-                if (SynonymRuleManager.getSingleton().reloadSynonymRule(currentMaxVersion)) {
-                    lastUpdateVersion = currentMaxVersion;
-                }
-            }
-        } catch (Exception e) {
-            LOGGER.error("Failed to reload synonym rule!", e);
-        }
-    }
+	@Override
+	public void run() {
+		try {
+			long currentMaxVersion = JDBCUtils.queryMaxSynonymRuleVersion(configuration.getDBUrl(), configuration.getUsername(), configuration.getPassword());
+			if (currentMaxVersion > lastUpdateVersion) {
+				if (SynonymRuleManager.getSingleton().reloadSynonymRule(currentMaxVersion)) {
+					lastUpdateVersion = currentMaxVersion;
+				}
+			}
+		} catch (Exception e) {
+			LOGGER.error("Failed to reload synonym rule!", e);
+		}
+	}
 
 }
