@@ -33,7 +33,6 @@ public final class JDBCUtils {
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
-		
 			LOGGER.info("username:{}",username);
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			conn = DriverManager.getConnection(dbUrl, username,password);
