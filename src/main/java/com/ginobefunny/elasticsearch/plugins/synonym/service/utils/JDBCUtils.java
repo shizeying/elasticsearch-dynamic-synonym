@@ -70,7 +70,7 @@ public final class JDBCUtils {
 			
 			rs = stmt.executeQuery(sql);
 			while (rs.next()) {
-				list.add(rs.getNString("rule"));
+				list.add(rs.getString("rule"));
 			}
 		} finally {
 			closeQuietly(conn, stmt, rs);
