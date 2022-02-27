@@ -54,7 +54,7 @@ Elasticsearch自带的同义词过滤器支持在分析器配置（使用synonym
 2.使用maven编译插件
 
     mvn clean install -DskipTests
-   
+
 3.在ES_HOME/plugin目录新建dynamic-synonym目录，并将target/releases/elasticsearch-dynamic-synonym-\<version\>.zip文件解压到该目录
 
 4.在MySQL中创建Elasticsearch同义词数据库并创建用户
@@ -101,7 +101,9 @@ Elasticsearch创建索引时配置分析器和过滤器：
                   "expand": true,
                   "ignore_case": true,
                   "tokenizer": "whitespace",
-                  "db_url": "jdbc:mysql://localhost:3306/elasticsearch?user=es_user&password=es_pwd&useUnicode=true&characterEncoding=UTF8"
+                  "username":"username",
+                  "password":"password",
+                  "db_url": "jdbc:mysql://ip:port/database?useUnicode=true&characterEncoding=UTF8&autoReconnect=true"
                 }
               }
             }
@@ -155,7 +157,7 @@ Elasticsearch创建索引时配置分析器和过滤器：
         }
       }
     }
-
+    
     {
       "took": 7,
       "timed_out": false,
@@ -193,12 +195,12 @@ Elasticsearch创建索引时配置分析器和过滤器：
 往数据库中插入一条同义词，测试【范斯】
 
     INSERT INTO `dynamic_synonym_rule` VALUES ('3', 'Vans, 范斯', '1', '3');
-
+    
     // wait for 2 minutes to reload 
     [2017-03-15 15:52:28,895][INFO ][node                     ] [node-local] started
     [2017-03-15 15:55:29,645][INFO ][dynamic-synonym          ] Start to reload synonym rule...
     [2017-03-15 15:55:29,661][INFO ][dynamic-synonym          ] Succeed to reload 3 synonym rule!
-
+    
     POST index_synonym/_search
     {
       "query": {
